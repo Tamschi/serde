@@ -6,9 +6,14 @@
 #![allow(
     unknown_lints,
     mixed_script_confusables,
+    clippy::items_after_statements,
+    clippy::missing_errors_doc,
+    clippy::missing_panics_doc,
+    clippy::must_use_candidate,
     // Clippy bug: https://github.com/rust-lang/rust-clippy/issues/7422
     clippy::nonstandard_macro_braces,
     clippy::ptr_arg,
+    clippy::too_many_lines,
     clippy::trivially_copy_pass_by_ref
 )]
 
@@ -822,4 +827,65 @@ where
     S: Serializer,
 {
     vec.first().serialize(serializer)
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+#[derive(Debug, PartialEq, Deserialize)]
+#[serde(tag = "tag")]
+enum InternallyTagged {
+    #[serde(deserialize_with = "deserialize_generic")]
+    Unit,
+
+    #[serde(deserialize_with = "deserialize_generic")]
+    Newtype(i32),
+
+    #[serde(deserialize_with = "deserialize_generic")]
+    Struct { f1: String, f2: u8 },
+}
+
+fn deserialize_generic<'de, T, D>(deserializer: D) -> StdResult<T, D::Error>
+where
+    T: Deserialize<'de>,
+    D: Deserializer<'de>,
+{
+    T::deserialize(deserializer)
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+#[repr(packed)]
+pub struct RemotePacked {
+    pub a: u16,
+    pub b: u32,
+}
+
+#[derive(Serialize)]
+#[repr(packed)]
+#[serde(remote = "RemotePacked")]
+pub struct RemotePackedDef {
+    a: u16,
+    b: u32,
+}
+
+impl Drop for RemotePackedDef {
+    fn drop(&mut self) {}
+}
+
+#[repr(packed)]
+pub struct RemotePackedNonCopy {
+    pub a: u16,
+    pub b: String,
+}
+
+#[derive(Deserialize)]
+#[repr(packed)]
+#[serde(remote = "RemotePackedNonCopy")]
+pub struct RemotePackedNonCopyDef {
+    a: u16,
+    b: String,
+}
+
+impl Drop for RemotePackedNonCopyDef {
+    fn drop(&mut self) {}
 }

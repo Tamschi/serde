@@ -144,9 +144,8 @@
 //! # }
 //! ```
 
-#![doc(html_root_url = "https://docs.rs/serde_test/1.0.126")]
+#![doc(html_root_url = "https://docs.rs/serde_test/1.0.136")]
 #![cfg_attr(feature = "cargo-clippy", allow(renamed_and_removed_lints))]
-#![cfg_attr(feature = "cargo-clippy", deny(clippy, clippy_pedantic))]
 // Ignored clippy lints
 #![cfg_attr(feature = "cargo-clippy", allow(float_cmp, needless_doctest_main))]
 // Ignored clippy_pedantic lints
@@ -155,6 +154,7 @@
     allow(
         cloned_instead_of_copied,
         empty_line_after_outer_attr,
+        manual_assert,
         missing_docs_in_private_items,
         missing_panics_doc,
         module_name_repetitions,

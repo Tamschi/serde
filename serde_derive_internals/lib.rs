@@ -1,9 +1,10 @@
 #![doc(html_root_url = "https://docs.rs/serde_derive_internals/0.26.0")]
 #![allow(unknown_lints, bare_trait_objects)]
-#![deny(clippy::all, clippy::pedantic)]
 // Ignored clippy lints
 #![allow(
     clippy::cognitive_complexity,
+    // clippy bug: https://github.com/rust-lang/rust-clippy/issues/7575
+    clippy::collapsible_match,
     // clippy bug: https://github.com/rust-lang/rust-clippy/issues/6797
     clippy::manual_map,
     clippy::missing_panics_doc,
@@ -21,6 +22,7 @@
     clippy::enum_glob_use,
     clippy::items_after_statements,
     clippy::let_underscore_drop,
+    clippy::manual_assert,
     clippy::match_same_arms,
     // clippy bug: https://github.com/rust-lang/rust-clippy/issues/6984
     clippy::match_wildcard_for_single_variants,
